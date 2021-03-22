@@ -8,13 +8,14 @@ import numpy as np
 from pathlib import Path
 
 class SciPlex():
-    def __init__(self, data_path, preprocess=False, ignore_cache=False):
+    def __init__(self, data_path, preprocess=False, ignore_cache=False, cache_dir=None):
         self._data_path = Path(data_path)
         self._preprocess = preprocess
         self._ignore_cache = ignore_cache
 
+        cache_dir = Path(cache_dir) if cache_dir else self._data_path
         self._cache_path = 'data_processed.h5ad' if preprocess else 'data_raw.h5ad'
-        self._cache_path = self._data_path / self._cache_path
+        self._cache_path = cache_dir / self._cache_path
 
     @property
     def dataset(self) -> AnnData:
