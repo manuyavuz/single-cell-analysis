@@ -112,16 +112,19 @@ class SciPlex():
             np.sum(adata.var.n_cells_by_counts < 3))
         adata.raw = adata
 
-        # filter by cell/gene/mito expression values
+        # filter by cell/gene
         sc.pp.filter_cells(adata, min_genes=200)
         sc.pp.filter_genes(adata, min_cells=3)
-        adata = adata[adata.obs.pct_counts_mito <= 10, :]
+
+        # NOTE: Do not filter by mitochondrial expression levels as it makes the distributions closer.
+        # Think if that should be done or not.
+        # adata = adata[adata.obs.pct_counts_mito <= 10, :]
 
         sc.pp.normalize_total(adata)
         sc.pp.sqrt(adata)
 
-        sc.tl.pca(adata)
-        sc.pp.neighbors(adata)
+        sc.tl.pca(adata, n_comps=100)
+        sc.pp.neighbors(adata, n_neighbors=10, n_pcs=40)
         sc.tl.umap(adata)
         return adata
 
