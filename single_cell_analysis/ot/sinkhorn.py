@@ -1,5 +1,7 @@
 import torch
 from torch import nn
+import ot
+import ot.plot
 
 class SinkhornDistance(nn.Module):
     r"""
